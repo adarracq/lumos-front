@@ -1,0 +1,25 @@
+export default {
+    primary: '#333333',
+    gray: '#979191',
+    lightGray: '#F6F8FC',
+    lightGray2: '#BBBBBB',
+    white: '#fff',
+    black: '#000',
+    green: '#00AB41',
+    blue: '#007bff',
+    red: '#ED2939',
+    yellow: '#e6cc00',
+    purple: '#7e57c2',
+    orange: '#FFA500',
+    lightYellow: '#ffffcc',
+    lightBlue: '#ADD8E6',
+    lightRed: '#FFC0CB',
+    lightGreen: '#90EE90',
+
+    // questions colors
+    qRed: '#FF7F7F',
+    qOrange: '#FFA500',
+    qGrey: '#D3D3D3',
+    qYellow: '#FFFF00',
+    qGreen: '#7FFF00',
+}
