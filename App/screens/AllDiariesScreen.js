@@ -4,7 +4,7 @@ import React from 'react'
 export default function AllDiaries() {
     return (
         <View>
-            <Text>AllDiaries</Text>
+            <Text>Coucou</Text>
         </View>
     )
 }

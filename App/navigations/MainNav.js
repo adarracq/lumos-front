@@ -7,8 +7,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import Colors from '../shared/Colors';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import BilanHebdoScreen from '../screens/BilanHebdoScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -33,10 +32,19 @@ export default function MainNav() {
                 }}
             >
                 <Drawer.Screen name="Suivi quotidien" component={HomeScreen} />
-                <Drawer.Screen name="Exercises" component={AllExercisesScreen} />
+                <Drawer.Screen name="Exercices" component={AllExercisesScreen} />
                 <Drawer.Screen name="Meditations" component={AllMeditationsScreen} />
                 <Drawer.Screen name="Journaux" component={AllDiariesScreen} />
                 <Drawer.Screen name="Profil" component={ProfileScreen} />
+                <Drawer.Screen
+                    name="BilanHebdo"
+                    component={BilanHebdoScreen}
+                    options={{
+                        drawerItemStyle: {
+                            display: 'none',
+                        },
+                    }}
+                />
             </Drawer.Navigator>
         </NavigationContainer>
     );

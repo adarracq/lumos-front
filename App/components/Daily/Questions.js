@@ -16,14 +16,18 @@ export default function Questions({ daily, setDaily, background }) {
 
 
     const getQuestions = async () => {
-        const _questions = DailyQuestions.questions;
+        // get questions with current thematic
+        const _questions = DailyQuestions.questions.filter(question => question.thematic === daily.thematic);
         setQuestions(_questions);
 
-        if (daily?.questions.length > 0 || answers.length > 0) return;
-
-        _questions.map(() => {
-            setAnswers([...answers, null]);
-        });
+        if (daily?.questions.length > 0 || answers.length > 0) {
+            setAnswers(daily.questions);
+        }
+        else {
+            _questions.map(() => {
+                setAnswers([...answers, null]);
+            });
+        }
     }
 
     const setAnswer = (answer) => {
@@ -48,7 +52,7 @@ export default function Questions({ daily, setDaily, background }) {
 
     return background && (
         <ImageBackground
-            source={background}
+            //source={background}
             style={styles.container}
         >
             {
@@ -84,7 +88,7 @@ export default function Questions({ daily, setDaily, background }) {
                                     <Text style={styles.starText}>2</Text>
                                     <AntDesign name="star" size={20} color="white" />
                                 </View>
-                                <Text style={styles.answerText}>Un peu</Text>
+                                <Text style={styles.answerText}>Pas assez</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={answers[currentQuestion] === 3 ? styles.answerSelected : styles.answer}

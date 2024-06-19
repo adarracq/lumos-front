@@ -16,7 +16,11 @@ export default function NightExercise({ daily, setDaily, background }) {
 
 
         if (daily.nightExercise && daily.nightExercise !== '') {
-            setExercise(daily.nightExercise);
+            Thematics.thematics[daily.thematic].nightExercises.forEach(ex => {
+                if (ex.title == daily.nightExercise) {
+                    setExercise(ex);
+                }
+            });
         }
         else {
             _exercise = Thematics.thematics[daily.thematic].nightExercises[Math.floor(Math.random() * Thematics.thematics[daily.thematic].nightExercises.length)];
@@ -33,21 +37,39 @@ export default function NightExercise({ daily, setDaily, background }) {
 
     return background && (
         <ImageBackground
-            source={background}
+            //source={background}
             style={styles.container}>
             {
                 showExercise ? (
                     <>
                         <Text style={styles.title}>Votre exercice du soir</Text>
-                        <Text></Text>
-                        <Text style={styles.exercise}>{exercise}</Text>
+                        <Text style={styles.exercise}>{exercise.title}</Text>
+                        <Text style={styles.advice}>{exercise.objective}</Text>
+                        {
+                            exercise.steps && exercise.steps.length > 0 &&
+                            <View style={styles.exercise}>
+                                {
+                                    exercise.steps.map((step, index) => {
+                                        return (
+                                            <Text
+                                                key={index}
+                                                style={styles.steps}
+                                            >
+                                                <AntDesign name="check" size={20} color="white" />
+                                                {step}
+                                            </Text>
+                                        )
+                                    })
+                                }
+                            </View>
+                        }
                         <Text style={styles.advice}>
                             {"Essayer d'y réflechir le plus objectivement possible sans vous juger."}
                         </Text>
                         <TouchableOpacity
                             style={styles.button}
                             onPress={() => {
-                                setDaily({ ...daily, nightExercise: exercise });
+                                setDaily({ ...daily, nightExercise: exercise.title });
                             }}
                         >
                             <Text style={styles.continue}>Continuer</Text>
@@ -91,6 +113,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         marginTop: 50,
+    },
+    steps: {
+        color: 'white',
+        textAlign: 'left',
+        padding: 5
     },
     exercise: {
         fontSize: 20,

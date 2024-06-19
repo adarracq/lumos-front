@@ -1,19 +1,37 @@
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Colors from '../shared/Colors'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DailiesContext } from '../contexts/DailiesContext';
 import DailyScreen from './DailyScreen';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 export default function HomeScreen({ navigation }) {
 
     const [dailies, setDailies] = useState(DailiesContext);
     const [currentDaily, setCurrentDaily] = useState(null);
 
+    //fonction de test
     const deleteDailies = async () => {
         try {
             await AsyncStorage.removeItem('Dailies')
             console.log('dailies deleted')
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    //fonction de test
+    const removeLastDaily = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('Dailies')
+            let dailies = []
+            if (jsonValue != null) {
+                dailies = JSON.parse(jsonValue)
+            }
+            dailies.pop()
+            await AsyncStorage.setItem('Dailies', JSON.stringify(dailies))
+            console.log('daily removed')
         } catch (e) {
             console.log(e)
         }
@@ -35,6 +53,7 @@ export default function HomeScreen({ navigation }) {
                 setDailies(dailies)
                 return
             }
+            // si il n'y a pas de daily pour aujourd'hui
             const daily = {
                 date: new Date().toISOString().split('T')[0],
                 thematic: getThematic(dailies),
@@ -44,13 +63,14 @@ export default function HomeScreen({ navigation }) {
                 nightExercise: '',
                 feelings: [],
                 diaries: [],
-                goals: []
+                todayGoals: dailies.length > 0 ? dailies[dailies.length - 1].diaries[2] : []
             }
             dailies.push(daily)
             await AsyncStorage.setItem('Dailies', JSON.stringify(dailies))
 
             setCurrentDaily(daily)
             setDailies(dailies)
+            console.log(dailies)
 
         } catch (e) {
             console.log(e)
@@ -67,6 +87,7 @@ export default function HomeScreen({ navigation }) {
             const today = new Date().toISOString().split('T')[0];
             const _daily = dailies.find(daily => daily.date === today)
             if (_daily) {
+                _daily.thematic = currentDaily.thematic
                 _daily.mantra = currentDaily.mantra
                 _daily.dayExercise = currentDaily.dayExercise
                 _daily.questions = currentDaily.questions
@@ -82,16 +103,15 @@ export default function HomeScreen({ navigation }) {
     }
 
     const getThematic = (dailies) => {
-        if (dailies.length == 0 || dailies.length == 1) {
+        if (dailies.length == 0)
             return 0
-        }
-        else {
-            return dailies[dailies.length - 2].thematic + 1
-        }
+        else
+            return (dailies[dailies.length - 1].thematic + 1) % 14
     }
 
     useEffect(() => {
         //deleteDailies();
+        //removeLastDaily();
         getDailies();
     }, []);
 
@@ -102,6 +122,12 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <TouchableOpacity
+                style={styles.burger}
+                onPress={() => navigation.openDrawer()}
+            >
+                <MaterialCommunityIcons name="forwardburger" size={30} color={Colors.lightGray2} />
+            </TouchableOpacity>
             <DailyScreen daily={currentDaily} setDaily={setCurrentDaily} />
         </View>
     )
@@ -115,8 +141,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'column',
     },
-    date: {
-        fontSize: 20,
+    burger: {
         color: Colors.white,
+        position: 'absolute',
+        top: 40,
+        left: 5,
+        zIndex: 1,
     }
 })

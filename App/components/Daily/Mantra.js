@@ -43,7 +43,7 @@ export default function Mantra({ daily, setDaily, background }) {
 
     return background && (
         <ImageBackground
-            source={background}
+            //source={background}
             style={styles.container}>
             <Text style={styles.title}>Votre mantra du jour</Text>
             <Text></Text>
@@ -51,6 +51,22 @@ export default function Mantra({ daily, setDaily, background }) {
             <Text style={styles.advice}>
                 {"Répétez vous plusieurs fois ce mantra en le ressentant profondément.\n\nVisualisez les effets positifs que le mantra aura sur votre vie.\n\nMéditez sur le mantra pour en intérioriser le message."}
             </Text>
+            {
+                daily && daily.todayGoals && daily.todayGoals.length > 0 &&
+                <Text style={styles.goals}>
+                    Rappel de vos objectifs pour aujourd'hui:
+                    {
+                        daily.todayGoals.map((goal, index) => {
+                            return (
+                                <Text key={index}>
+                                    <AntDesign name="check" size={15} color="white" />
+                                    {goal}
+                                </Text>
+                            )
+                        })
+                    }
+                </Text>
+            }
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
@@ -84,6 +100,14 @@ const styles = StyleSheet.create({
     mantra: {
         fontSize: 20,
         fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'center',
+        backgroundColor: 'rgba(0, 0, 0, .4)',
+        padding: 30,
+        width: ScreenWidth,
+    },
+    goals: {
+        fontSize: 16,
         color: 'white',
         textAlign: 'center',
         backgroundColor: 'rgba(0, 0, 0, .4)',

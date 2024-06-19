@@ -11,29 +11,26 @@ export default function Diaries({ daily, setDaily, background }) {
             {
                 title: 'Journal de gratitude',
                 value: [
-                    daily.diaries[0].value[0],
-                    daily.diaries[0].value[1],
-                    daily.diaries[0].value[2]
+                    daily.diaries[0]?.value[0],
+                    daily.diaries[0]?.value[1]
                 ],
-                text: 'Notez 3 choses pour lesquelles vous êtes reconnaissant en utilisant des mots sincères et positifs.'
+                text: 'Notez 2 choses pour lesquelles vous êtes reconnaissant en utilisant des mots sincères et positifs.'
             },
             {
                 title: 'Journal de positivité',
                 value: [
-                    daily.diaries[1].value[0],
-                    daily.diaries[1].value[1],
-                    daily.diaries[1].value[2]
+                    daily.diaries[1]?.value[0],
+                    daily.diaries[1]?.value[1]
                 ],
-                text: "Notez 3 choses que vous avez bien faites ou appréciées pendant la journée."
+                text: "Notez 2 choses que vous avez bien faites ou appréciées pendant la journée."
             },
             {
                 title: 'Journal des objectifs',
                 value: [
-                    daily.diaries[2].value[0],
-                    daily.diaries[2].value[1],
-                    daily.diaries[2].value[2]
+                    daily.diaries[2]?.value[0],
+                    daily.diaries[2]?.value[1]
                 ],
-                text: "Notez 3 choses que vous souhaitez faire demain."
+                text: "Notez 2 choses que vous souhaitez faire demain."
             },
         ];
         setDiaries(_diaries);
@@ -45,7 +42,7 @@ export default function Diaries({ daily, setDaily, background }) {
 
     const isFilled = () => {
         if (!diaries || diaries.length === 0) return false;
-        return diaries[0].value[0] && diaries[0].value[1] && diaries[0].value[2] && diaries[1].value[0] && diaries[1].value[1] && diaries[1].value[2] && diaries[2].value[0] && diaries[2].value[1] && diaries[2].value[2];
+        return diaries[0].value[0] && diaries[0].value[1] && diaries[1].value[0] && diaries[1].value[1] && diaries[2].value[0] && diaries[2].value[1];
     }
 
     useEffect(() => {
@@ -53,7 +50,9 @@ export default function Diaries({ daily, setDaily, background }) {
     }, [daily]);
 
     return (
-        <ImageBackground source={background} style={styles.container}>
+        <ImageBackground
+            //source={background} 
+            style={styles.container}>
             <ScrollView style={styles.scroll}>
                 <Text style={styles.title}>Vos Journaux quotidiens</Text>
                 {diaries.map((diary, index) => (
@@ -77,16 +76,6 @@ export default function Diaries({ daily, setDaily, background }) {
                             onChangeText={(text) => {
                                 let _diaries = [...diaries];
                                 _diaries[index].value[1] = text;
-                                setDiaries(_diaries);
-                            }}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Je viens de faire du sport..."
-                            value={diary.value[2]}
-                            onChangeText={(text) => {
-                                let _diaries = [...diaries];
-                                _diaries[index].value[2] = text;
                                 setDiaries(_diaries);
                             }}
                         />

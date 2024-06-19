@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet, Image, ImageBackground, TouchableOpacity, Dimensions } from 'react-native'
+import { View, Text, Button, StyleSheet, Image, ImageBackground, TouchableOpacity, Dimensions, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Thematics from '../../shared/Thematics';
 import { AntDesign } from '@expo/vector-icons';
@@ -15,14 +15,16 @@ export default function Exercise({ daily, setDaily, background }) {
 
 
         if (daily.dayExercise && daily.dayExercise !== '') {
-            setExercise(daily.dayExercise);
+            Thematics.thematics[daily.thematic].dayExercises.forEach(ex => {
+                if (ex.title == daily.dayExercise) {
+                    setExercise(ex);
+                }
+            });
         }
         else {
             _exercise = Thematics.thematics[daily.thematic].dayExercises[Math.floor(Math.random() * Thematics.thematics[daily.thematic].dayExercises.length)];
             setExercise(_exercise);
         }
-
-
     }
 
     useEffect(() => {
@@ -31,18 +33,38 @@ export default function Exercise({ daily, setDaily, background }) {
 
     return background && (
         <ImageBackground
-            source={background}
+            //source={background}
             style={styles.container}>
             <Text style={styles.title}>Votre exercice du jour</Text>
-            <Text></Text>
-            <Text style={styles.exercise}>{exercise}</Text>
+            <Text style={styles.exercise}>{exercise.title}</Text>
+            <Text style={styles.advice}>{exercise.objective}</Text>
+            {
+                exercise.steps && exercise.steps.length > 0 &&
+                <View style={styles.exercise}>
+                    {
+                        exercise.steps.map((step, index) => {
+                            return (
+                                <Text
+                                    key={index}
+                                    style={styles.steps}
+                                >
+                                    <AntDesign name="check" size={20} color="white" />
+                                    {step}
+                                </Text>
+                            )
+                        })
+                    }
+                </View>
+            }
+
             <Text style={styles.advice}>
                 {"Essayer d'appliquer cet exercice tout au long de la journée."}
             </Text>
+
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
-                    setDaily({ ...daily, dayExercise: exercise });
+                    setDaily({ ...daily, dayExercise: exercise.title });
                 }}
             >
                 <Text style={styles.continue}>Continuer</Text>
@@ -61,6 +83,11 @@ const styles = StyleSheet.create({
         width: '100%',
         objectFit: 'cover',
     },
+    steps: {
+        color: 'white',
+        textAlign: 'left',
+        padding: 5
+    },
     title: {
         fontSize: 25,
         fontWeight: 'bold',
@@ -72,6 +99,14 @@ const styles = StyleSheet.create({
     exercise: {
         fontSize: 20,
         fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'center',
+        backgroundColor: 'rgba(0, 0, 0, .4)',
+        padding: 30,
+        width: ScreenWidth,
+    },
+    goals: {
+        fontSize: 16,
         color: 'white',
         textAlign: 'center',
         backgroundColor: 'rgba(0, 0, 0, .4)',

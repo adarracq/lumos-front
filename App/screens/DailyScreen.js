@@ -7,10 +7,12 @@ import Feelings from '../components/Daily/Feelings';
 import Diaries from '../components/Daily/Diaries';
 import NightExercise from '../components/Daily/NightExercise';
 import Summary from '../components/Daily/Summary';
+import StartDay from '../components/Daily/StartDay';
+import { functions } from '../shared/Functions';
 
 export default function DailyScreen({ daily, setDaily }) {
 
-    const [progress, setProgress] = useState(0)
+    const [progress, setProgress] = useState(-1)
 
     const getProgress = () => {
         if (!daily) return;
@@ -60,25 +62,6 @@ export default function DailyScreen({ daily, setDaily }) {
         return () => backHandler.remove();
     }, [progress]);
 
-    const getRandomBackgroundPath = () => {
-        const backgrounds = [
-            require('../assets/backgrounds/bck0.jpg'),
-            require('../assets/backgrounds/bck1.jpg'),
-            require('../assets/backgrounds/bck2.jpg'),
-            require('../assets/backgrounds/bck3.jpg'),
-            require('../assets/backgrounds/bck4.jpg'),
-            require('../assets/backgrounds/bck5.jpg'),
-            require('../assets/backgrounds/bck6.jpg'),
-            require('../assets/backgrounds/bck7.jpg'),
-            require('../assets/backgrounds/bck8.jpg'),
-            require('../assets/backgrounds/bck9.jpg'),
-            require('../assets/backgrounds/bck10.jpg'),
-            require('../assets/backgrounds/bck11.jpg'),
-            require('../assets/backgrounds/bck12.jpg'),
-        ];
-        return backgrounds[Math.floor(Math.random() * backgrounds.length)];
-    }
-
 
     useEffect(() => {
         setDaily(daily);
@@ -86,33 +69,37 @@ export default function DailyScreen({ daily, setDaily }) {
     }, [daily]);
 
     switch (progress) {
+        case -1:
+            return (
+                <StartDay background={functions.getRandomBackgroundPath()} setProgress={setProgress} />
+            )
         case 0:
             return (
-                <Mantra daily={daily} setDaily={setDaily} background={getRandomBackgroundPath()} />
+                <Mantra daily={daily} setDaily={setDaily} background={functions.getRandomBackgroundPath()} />
             )
         case 1:
             return (
-                <Exercise daily={daily} setDaily={setDaily} background={getRandomBackgroundPath()} />
+                <Exercise daily={daily} setDaily={setDaily} background={functions.getRandomBackgroundPath()} />
             )
         case 2:
             return (
-                <Questions daily={daily} setDaily={setDaily} background={getRandomBackgroundPath()} />
+                <Questions daily={daily} setDaily={setDaily} background={functions.getRandomBackgroundPath()} />
             )
         case 3:
             return (
-                <Feelings daily={daily} setDaily={setDaily} background={getRandomBackgroundPath()} />
+                <Feelings daily={daily} setDaily={setDaily} background={functions.getRandomBackgroundPath()} />
             )
         case 4:
             return (
-                <Diaries daily={daily} setDaily={setDaily} background={getRandomBackgroundPath()} />
+                <Diaries daily={daily} setDaily={setDaily} background={functions.getRandomBackgroundPath()} />
             )
         case 5:
             return (
-                <NightExercise daily={daily} setDaily={setDaily} background={getRandomBackgroundPath()} />
+                <NightExercise daily={daily} setDaily={setDaily} background={functions.getRandomBackgroundPath()} />
             )
         default:
             return (
-                <Summary daily={daily} goTo={setProgress} background={getRandomBackgroundPath()} />
+                <Summary daily={daily} goTo={setProgress} background={functions.getRandomBackgroundPath()} />
             )
     }
 }
